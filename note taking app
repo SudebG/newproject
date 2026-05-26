@@ -34,6 +34,28 @@ public:
         }
     }
 
+    void searchNotes() {
+        if (notes.empty()) {
+            cout << "No notes to search.\n";
+            return;
+        }
+        string keyword;
+        cout << "Enter keyword to search: ";
+        cin.ignore();
+        getline(cin, keyword);
+        cout << "\nSearch results for \"" << keyword << "\":\n";
+        bool found = false;
+        for (size_t i = 0; i < notes.size(); ++i) {
+            if (notes[i].find(keyword) != string::npos) {
+                cout << i + 1 << ". " << notes[i] << endl;
+                found = true;
+            }
+        }
+        if (!found) {
+            cout << "No matching notes found.\n";
+        }
+    }
+
     void saveNotes() {
         ofstream file(filename);
         for (const auto& note : notes) {
@@ -54,10 +76,11 @@ int main() {
     NoteApp myApp;
     int choice;
     do {
-        cout << "\n1. Add Note\n2. View Notes\n3. Exit\nChoice: ";
+        cout << "\n1. Add Note\n2. View Notes\n3. Search Notes\n4. Exit\nChoice: ";
         cin >> choice;
         if (choice == 1) myApp.addNote();
         else if (choice == 2) myApp.viewNotes();
-    } while (choice != 3);
+        else if (choice == 3) myApp.searchNotes();
+    } while (choice != 4);
     return 0;
 }
