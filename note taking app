@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+class NoteApp {
+private:
+    vector<string> notes;
+    const string filename = "notes.txt";
+
+public:
+    NoteApp() {
+        loadNotes();
+    }
+
+    void addNote() {
+        string text;
+        cout << "Enter your note: ";
+        cin.ignore();
+        getline(cin, text);
+        notes.push_back(text);
+        saveNotes();
+    }
+
+    void viewNotes() {
+        if (notes.empty()) {
+            cout << "No notes found.\n";
+            return;
+        }
+        for (size_t i = 0; i < notes.size(); ++i) {
+            cout << i + 1 << ". " << notes[i] << endl;
+        }
+    }
+
+    void saveNotes() {
+        ofstream file(filename);
+        for (const auto& note : notes) {
+            file << note << endl;
+        }
+    }
+
+    void loadNotes() {
+        ifstream file(filename);
+        string line;
+        while (getline(file, line)) {
+            notes.push_back(line);
+        }
+    }
+};
+
+int main() {
+    NoteApp myApp;
+    int choice;
+    do {
+        cout << "\n1. Add Note\n2. View Notes\n3. Exit\nChoice: ";
+        cin >> choice;
+        if (choice == 1) myApp.addNote();
+        else if (choice == 2) myApp.viewNotes();
+    } while (choice != 3);
+    return 0;
+}
